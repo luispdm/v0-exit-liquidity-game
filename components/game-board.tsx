@@ -23,7 +23,6 @@ const PHASE_LABELS: Record<string, string> = {
   CPU_SELECT: "Opponent Selecting...",
   REVEAL: "Reveal",
   RESOLVE: "Resolve",
-  REFILL: "Refill Hands",
   NEXT_ROUND: "Next Round",
   GAME_OVER: "Game Over",
 };
@@ -34,7 +33,6 @@ const PHASE_ORDER = [
   "CPU_SELECT",
   "REVEAL",
   "RESOLVE",
-  "REFILL",
   "NEXT_ROUND",
 ];
 
@@ -55,7 +53,6 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
     doCpuSelectCard,
     doReveal,
     doResolve,
-    doRefill,
     doNextRound,
     scheduleAction,
   } = useGame();
@@ -113,12 +110,10 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
 
   const handleAdvance = useCallback(() => {
     if (!state) return;
-    if (state.phase === "REFILL") {
-      doRefill();
-    } else if (state.phase === "NEXT_ROUND") {
+    if (state.phase === "NEXT_ROUND") {
       doNextRound();
     }
-  }, [state, doRefill, doNextRound]);
+  }, [state, doNextRound]);
 
   if (!state) return null;
 
@@ -156,8 +151,6 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
           <span>R{state.round}</span>
           <span className="text-foreground/50">|</span>
           <span>Picker: <span className="text-primary">{state.picker === "human" ? "YOU" : "CPU"}</span></span>
-          <span className="text-foreground/50">|</span>
-          <span>Deck: {state.drawPile.length}</span>
           <span className="text-foreground/50">|</span>
           <span className="text-primary">Dumped: {state.humanDumped.length}</span>
           <span className="text-foreground/50">/</span>
@@ -243,7 +236,6 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
           {/* Reveal / Battle Area */}
           {(state.phase === "REVEAL" ||
             state.phase === "RESOLVE" ||
-            state.phase === "REFILL" ||
             state.phase === "NEXT_ROUND") &&
             state.humanPlayedCard &&
             state.cpuPlayedCard && (
@@ -280,13 +272,13 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
                 </div>
 
                 {/* Advance buttons */}
-                {(state.phase === "REFILL" || state.phase === "NEXT_ROUND") && (
+                {state.phase === "NEXT_ROUND" && (
                   <Button
                     onClick={handleAdvance}
                     className="mt-2 font-mono text-xs"
                     size="sm"
                   >
-                    {state.phase === "REFILL" ? "Refill Hands" : "Next Round"}
+                    Next Round
                   </Button>
                 )}
               </section>

@@ -11,7 +11,6 @@ import {
   cpuSelectCard,
   reveal,
   resolve,
-  refill,
   nextRound,
 } from "@/lib/game-engine";
 
@@ -73,13 +72,6 @@ export function useGame() {
     });
   }, []);
 
-  const doRefill = useCallback(() => {
-    setState((prev) => {
-      if (!prev) return prev;
-      return refill(prev);
-    });
-  }, []);
-
   const doNextRound = useCallback(() => {
     setState((prev) => {
       if (!prev) return prev;
@@ -102,7 +94,6 @@ export function useGame() {
     doCpuSelectCard,
     doReveal,
     doResolve,
-    doRefill,
     doNextRound,
     scheduleAction,
   };

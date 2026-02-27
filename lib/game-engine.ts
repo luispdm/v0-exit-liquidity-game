@@ -10,7 +10,6 @@ export type Phase =
   | "CPU_SELECT"
   | "REVEAL"
   | "RESOLVE"
-  | "REFILL"
   | "NEXT_ROUND"
   | "GAME_OVER";
 
@@ -22,7 +21,6 @@ export interface GameState {
   picker: Picker;
   humanHand: Card[];
   cpuHand: Card[];
-  drawPile: Card[];
   humanDumped: Card[];
   cpuDumped: Card[];
   selectedAttribute: Attribute | null;
@@ -116,7 +114,6 @@ export function initGame(): GameState {
       picker: "human",
       humanHand: [],
       cpuHand: [],
-      drawPile: [],
       humanDumped: [],
       cpuDumped: [],
       selectedAttribute: null,
@@ -130,9 +127,9 @@ export function initGame(): GameState {
   }
 
   const deck = shuffle(CARDS);
-  const humanHand = deck.slice(0, 5);
-  const cpuHand = deck.slice(5, 10);
-  const drawPile = deck.slice(10);
+  const half = Math.floor(deck.length / 2);
+  const humanHand = deck.slice(0, half);
+  const cpuHand = deck.slice(half);
 
   return {
     phase: "PICK_ATTRIBUTE",
@@ -140,7 +137,6 @@ export function initGame(): GameState {
     picker: "human",
     humanHand,
     cpuHand,
-    drawPile,
     humanDumped: [],
     cpuDumped: [],
     selectedAttribute: null,
@@ -249,17 +245,19 @@ export function resolve(state: GameState): GameState {
   const newLog = [...state.log];
 
   if (humanWins) {
-    // Human dumps — their played card goes to CPU's hand (opponent forced to baghold it)
-    newCpuHand.push(state.humanPlayedCard);
+    // Human dumps — winner's card goes to the loser (CPU forced to baghold it)
+    // Loser (CPU) gets their own card back + the winner's dumped card
     newCpuHand.push(state.cpuPlayedCard);
+    newCpuHand.push(state.humanPlayedCard);
     newHumanDumped.push(state.humanPlayedCard);
     newLog.push(
       `${state.humanPlayedCard.name} (${attr}: ${humanVal}) vs ${state.cpuPlayedCard.name} (${attr}: ${cpuVal}) — You ${randomFrom(DUMP_PHRASES)}`
     );
   } else {
-    // CPU dumps — their played card goes to human's hand (you're forced to baghold it)
-    newHumanHand.push(state.cpuPlayedCard);
+    // CPU dumps — winner's card goes to the loser (you're forced to baghold it)
+    // Loser (human) gets their own card back + the winner's dumped card
     newHumanHand.push(state.humanPlayedCard);
+    newHumanHand.push(state.cpuPlayedCard);
     newCpuDumped.push(state.cpuPlayedCard);
     newLog.push(
       `${state.humanPlayedCard.name} (${attr}: ${humanVal}) vs ${state.cpuPlayedCard.name} (${attr}: ${cpuVal}) — You ${randomFrom(BAGHOLD_PHRASES)}`
@@ -273,7 +271,7 @@ export function resolve(state: GameState): GameState {
     humanDumped: newHumanDumped,
     cpuDumped: newCpuDumped,
     log: newLog,
-    phase: "REFILL",
+    phase: "NEXT_ROUND",
   };
 
   // Check for win immediately after resolve
@@ -281,34 +279,6 @@ export function resolve(state: GameState): GameState {
   return newState;
 }
 
-export function refill(state: GameState): GameState {
-  if (state.phase !== "REFILL") return state;
-
-  let newHumanHand = [...state.humanHand];
-  let newCpuHand = [...state.cpuHand];
-  let newDrawPile = [...state.drawPile];
-
-  // Refill human to 5
-  while (newHumanHand.length < 5 && newDrawPile.length > 0) {
-    newHumanHand.push(newDrawPile.shift()!);
-  }
-  // Refill cpu to 5
-  while (newCpuHand.length < 5 && newDrawPile.length > 0) {
-    newCpuHand.push(newDrawPile.shift()!);
-  }
-
-  let newState: GameState = {
-    ...state,
-    humanHand: newHumanHand,
-    cpuHand: newCpuHand,
-    drawPile: newDrawPile,
-    phase: "NEXT_ROUND",
-  };
-
-  // Check for win after refill too
-  newState = checkWin(newState);
-  return newState;
-}
 
 export function nextRound(state: GameState): GameState {
   if (state.phase !== "NEXT_ROUND") return state;
