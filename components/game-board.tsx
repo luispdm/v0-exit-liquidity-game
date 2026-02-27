@@ -130,11 +130,11 @@ export function GameBoard({ onQuit, opponentName }: { onQuit: () => void; oppone
         <div className="flex items-center gap-3 text-xs font-mono text-muted-foreground">
           <span>R{state.round}</span>
           <span className="text-foreground/50">|</span>
-          <span>Picker: <span className="text-primary">{state.picker === "human" ? "YOU" : state.opponentName}</span></span>
+          <span>Picker: <span className={state.picker === "human" ? "text-cyan-400" : "text-violet-400"}>{state.picker === "human" ? "YOU" : state.opponentName}</span></span>
           <span className="text-foreground/50">|</span>
-          <span className="text-primary">You dumped: {state.humanDumped.length}</span>
+          <span className="text-cyan-400">You dumped: {state.humanDumped.length}</span>
           <span className="text-foreground/50">/</span>
-          <span className="text-accent">They dumped: {state.cpuDumped.length}</span>
+          <span className="text-violet-400">They dumped: {state.cpuDumped.length}</span>
         </div>
       </header>
 
@@ -210,24 +210,26 @@ export function GameBoard({ onQuit, opponentName }: { onQuit: () => void; oppone
                 </div>
                 <div className="flex items-center gap-6">
                   <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] font-mono text-primary font-bold uppercase">You</span>
+                    <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase">You</span>
                     <GameCard
                       card={state.humanPlayedCard}
                       highlighted={state.selectedAttribute}
                       disabled
                       size="md"
+                      winner={state.roundWinner ? state.roundWinner === "human" : undefined}
                     />
                   </div>
                   <div className="flex flex-col items-center">
                     <span className="text-lg font-bold text-muted-foreground font-mono">VS</span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] font-mono text-accent font-bold uppercase truncate max-w-[120px]">{state.opponentName}</span>
+                    <span className="text-[10px] font-mono text-violet-400 font-bold uppercase truncate max-w-[120px]">{state.opponentName}</span>
                     <GameCard
                       card={state.cpuPlayedCard}
                       highlighted={state.selectedAttribute}
                       disabled
                       size="md"
+                      winner={state.roundWinner ? state.roundWinner === "cpu" : undefined}
                     />
                   </div>
                 </div>
@@ -321,9 +323,9 @@ export function GameBoard({ onQuit, opponentName }: { onQuit: () => void; oppone
           <DialogHeader>
             <DialogTitle className="text-center font-mono text-xl">
               {state.winner === "human" ? (
-                <span className="text-primary">YOU EXITED LIQUIDITY</span>
+                <span className="text-cyan-400">YOU EXITED LIQUIDITY</span>
               ) : (
-                <span className="text-accent">{state.opponentName} EXITED LIQUIDITY</span>
+                <span className="text-violet-400">{state.opponentName} EXITED LIQUIDITY</span>
               )}
             </DialogTitle>
             <DialogDescription className="text-center font-mono text-sm">

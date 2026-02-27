@@ -11,6 +11,7 @@ interface GameCardProps {
   onClick?: () => void;
   disabled?: boolean;
   size?: "sm" | "md";
+  winner?: boolean;
 }
 
 export function GameCard({
@@ -21,6 +22,7 @@ export function GameCard({
   onClick,
   disabled = false,
   size = "md",
+  winner,
 }: GameCardProps) {
   if (faceDown) {
     return (
@@ -46,9 +48,13 @@ export function GameCard({
       className={cn(
         "flex flex-col rounded-lg border-2 text-left transition-all font-mono select-none",
         size === "md" ? "h-52 w-36 p-2" : "h-40 w-28 p-1.5",
-        selected
-          ? "border-primary bg-primary/10 ring-2 ring-primary/50"
-          : "border-border bg-card hover:border-primary/50",
+        winner === true
+          ? "border-green-400 ring-2 ring-green-400/50 bg-card"
+          : winner === false
+            ? "border-red-400/60 bg-card"
+            : selected
+              ? "border-primary bg-primary/10 ring-2 ring-primary/50"
+              : "border-border bg-card hover:border-primary/50",
         disabled && !selected && "opacity-60 cursor-default",
         !disabled && "cursor-pointer hover:scale-105",
       )}

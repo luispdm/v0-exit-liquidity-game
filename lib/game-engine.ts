@@ -275,6 +275,7 @@ export function resolve(state: GameState): GameState {
     cpuDumped: newCpuDumped,
     log: newLog,
     phase: "NEXT_ROUND",
+    roundWinner: humanWins ? "human" : "cpu",
   };
 
   // Check for win immediately after resolve
@@ -293,6 +294,7 @@ export function nextRound(state: GameState): GameState {
     selectedAttribute: null,
     humanPlayedCard: null,
     cpuPlayedCard: null,
+    roundWinner: null,
     phase: "PICK_ATTRIBUTE",
     log: [
       ...state.log,
