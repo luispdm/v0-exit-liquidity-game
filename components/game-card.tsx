@@ -29,7 +29,7 @@ export function GameCard({
       <div
         className={cn(
           "flex items-center justify-center rounded-lg border-2 border-border bg-secondary font-mono select-none",
-          size === "md" ? "h-52 w-36" : "h-40 w-28",
+          size === "md" ? "h-64 w-44" : "h-48 w-36",
         )}
       >
         <div className="flex flex-col items-center gap-1 text-muted-foreground">
@@ -47,7 +47,7 @@ export function GameCard({
       disabled={disabled}
       className={cn(
         "flex flex-col rounded-lg border-2 text-left transition-all font-mono select-none",
-        size === "md" ? "h-52 w-36 p-2" : "h-40 w-28 p-1.5",
+        size === "md" ? "h-64 w-44 p-2" : "h-48 w-36 p-1.5",
         winner === true
           ? "border-green-400 ring-2 ring-green-400/50 bg-card"
           : winner === false
@@ -67,14 +67,14 @@ export function GameCard({
       >
         {card.name}
       </p>
-      <pre
+      <img
+        src={card.image}
+        alt={card.name}
         className={cn(
-          "flex-1 overflow-hidden leading-tight text-muted-foreground",
-          size === "md" ? "text-[8px]" : "text-[6px]",
+          "flex-1 object-contain rounded",
+          size === "md" ? "max-h-32" : "max-h-24",
         )}
-      >
-        {card.ascii}
-      </pre>
+      />
       <div
         className={cn(
           "grid grid-cols-2 gap-x-2 gap-y-0.5 border-t border-border pt-1 mt-1",
@@ -112,7 +112,7 @@ export function CardBack({ count, size = "md" }: { count: number; size?: "sm" | 
           key={i}
           className={cn(
             "flex items-center justify-center rounded-lg border-2 border-border bg-secondary font-mono select-none",
-            size === "md" ? "h-52 w-36" : "h-40 w-28",
+            size === "md" ? "h-64 w-44" : "h-48 w-36",
           )}
         >
           <div className="flex flex-col items-center gap-1 text-muted-foreground">
