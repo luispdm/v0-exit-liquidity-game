@@ -45,7 +45,7 @@ export const CARDS: Card[] = [
   { id: "c25", name: "$MINT", ascii: "  .-.\n | M |\n | I |\n | N |\n  '-'", price: 88, speed: 47, hack: 67, cult: 30 },
   { id: "c26", name: "$AIRDROP", ascii: "  \\ | /\n   \\|/\n  --*--\n   /|\\\n  / | \\", price: 30, speed: 71, hack: 14, cult: 85 },
   { id: "c27", name: "$FORK", ascii: "   |\n   |\n  /|\\\n / | \\\n/  |  \\", price: 71, speed: 39, hack: 47, cult: 16 },
-  { id: "c28", name: "$MEMPOOL", ascii: "  ~~~~~\n ~MEM~ \n ~POOL~\n ~~~~~\n  ===", price: 42, speed: 56, hack: 91, cult: 44 },
+  { id: "c28", name: "$MEMPOOL", ascii: "  ~~~~~\n ~MEM~ \n ~POOL~\n ~~~~~\n  ===", price: 42, speed: 56, hack: 90, cult: 44 },
   { id: "c29", name: "$ORACLE", ascii: "  .O.\n / | \\\n| ORC |\n \\ | /\n  'O'", price: 5, speed: 34, hack: 30, cult: 100 },
   { id: "c30", name: "$LAYER2", ascii: " [L2]\n |  |\n | >> |\n |  |\n [L2]", price: 36, speed: 15, hack: 55, cult: 53 },
 ];
