@@ -249,16 +249,18 @@ export function resolve(state: GameState): GameState {
   const newLog = [...state.log];
 
   if (humanWins) {
-    // Human dumps their card (it goes to dumped pile), CPU gets their card back
-    newHumanDumped.push(state.humanPlayedCard);
+    // Human dumps — their played card goes to CPU's hand (opponent forced to baghold it)
+    newCpuHand.push(state.humanPlayedCard);
     newCpuHand.push(state.cpuPlayedCard);
+    newHumanDumped.push(state.humanPlayedCard);
     newLog.push(
       `${state.humanPlayedCard.name} (${attr}: ${humanVal}) vs ${state.cpuPlayedCard.name} (${attr}: ${cpuVal}) — You ${randomFrom(DUMP_PHRASES)}`
     );
   } else {
-    // CPU dumps their card, human gets their card back
-    newCpuDumped.push(state.cpuPlayedCard);
+    // CPU dumps — their played card goes to human's hand (you're forced to baghold it)
+    newHumanHand.push(state.cpuPlayedCard);
     newHumanHand.push(state.humanPlayedCard);
+    newCpuDumped.push(state.cpuPlayedCard);
     newLog.push(
       `${state.humanPlayedCard.name} (${attr}: ${humanVal}) vs ${state.cpuPlayedCard.name} (${attr}: ${cpuVal}) — You ${randomFrom(BAGHOLD_PHRASES)}`
     );
