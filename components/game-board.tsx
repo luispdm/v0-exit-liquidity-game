@@ -23,7 +23,7 @@ const ATTRIBUTE_LABELS: Record<Attribute, string> = {
   cult: "Cult",
 };
 
-export function GameBoard({ onQuit }: { onQuit: () => void }) {
+export function GameBoard({ onQuit, opponentName }: { onQuit: () => void; opponentName: string }) {
   const {
     state,
     startGame,
@@ -41,8 +41,8 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
 
   // Start game on mount
   useEffect(() => {
-    startGame();
-  }, [startGame]);
+    startGame(opponentName);
+  }, [startGame, opponentName]);
 
   // Auto-scroll log
   useEffect(() => {

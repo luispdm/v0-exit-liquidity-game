@@ -25,9 +25,9 @@ export function useGame() {
     }
   }, []);
 
-  const startGame = useCallback(() => {
+  const startGame = useCallback((opponentName?: string) => {
     clearTimers();
-    setState(initGame());
+    setState(initGame(opponentName));
   }, [clearTimers]);
 
   const doPickAttribute = useCallback((attr: Attribute) => {

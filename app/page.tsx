@@ -9,8 +9,10 @@ type Screen = "start" | "game";
 export default function Page() {
   const [screen, setScreen] = useState<Screen>("start");
   const [gameKey, setGameKey] = useState(0);
+  const [opponentName, setOpponentName] = useState("");
 
-  const handleStart = useCallback(() => {
+  const handleStart = useCallback((name: string) => {
+    setOpponentName(name);
     setGameKey((k) => k + 1);
     setScreen("game");
   }, []);
@@ -20,7 +22,7 @@ export default function Page() {
   }, []);
 
   if (screen === "game") {
-    return <GameBoard key={gameKey} onQuit={handleQuit} />;
+    return <GameBoard key={gameKey} onQuit={handleQuit} opponentName={opponentName} />;
   }
 
   return <StartScreen onStart={handleStart} />;

@@ -105,7 +105,7 @@ function shuffle<T>(arr: T[]): T[] {
 // INITIALIZE GAME
 // ============================================================
 
-export function initGame(): GameState {
+export function initGame(opponentName?: string): GameState {
   const errors = validateDeck(CARDS);
   if (errors.length > 0) {
     return {
@@ -120,7 +120,7 @@ export function initGame(): GameState {
       humanPlayedCard: null,
       cpuPlayedCard: null,
       winner: null,
-      opponentName: generateOpponentName(),
+      opponentName: opponentName ?? generateOpponentName(),
       log: ["DECK VALIDATION FAILED. Cannot start match."],
       validationErrors: errors,
     };
@@ -129,6 +129,7 @@ export function initGame(): GameState {
   const deck = shuffle(CARDS);
   const humanHand = deck.slice(0, 5);
   const cpuHand = deck.slice(5, 10);
+  const name = opponentName ?? generateOpponentName();
 
   return {
     phase: "PICK_ATTRIBUTE",
@@ -142,7 +143,7 @@ export function initGame(): GameState {
     humanPlayedCard: null,
     cpuPlayedCard: null,
     winner: null,
-    opponentName: generateOpponentName(),
+    opponentName: name,
     log: ["Match started. You pick the attribute first. Let's see who dumps faster."],
     validationErrors: [],
   };
@@ -175,12 +176,12 @@ function checkWin(state: GameState): GameState {
 export function pickAttribute(state: GameState, attr: Attribute): GameState {
   if (state.phase !== "PICK_ATTRIBUTE") return state;
 
-  const nextPhase: Phase = state.picker === "human" ? "HUMAN_SELECT" : "CPU_SELECT";
-
+  // After attribute is picked, BOTH players still need to select cards
+  // Human always selects first, then CPU
   return {
     ...state,
     selectedAttribute: attr,
-    phase: nextPhase,
+    phase: "HUMAN_SELECT",
     log: [
       ...state.log,
       `${state.picker === "human" ? "You" : state.opponentName} picked "${attr}" — lowest value wins this round.`,

@@ -1,15 +1,20 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { generateOpponentName } from "@/lib/game-engine";
 
 interface StartScreenProps {
-  onStart: () => void;
+  onStart: (opponentName: string) => void;
 }
 
 export function StartScreen({ onStart }: StartScreenProps) {
-  const [opponentName, setOpponentName] = useState(() => generateOpponentName());
+  const [opponentName, setOpponentName] = useState("");
+
+  // Generate on client only to avoid hydration mismatch
+  useEffect(() => {
+    setOpponentName(generateOpponentName());
+  }, []);
 
   const reroll = useCallback(() => {
     setOpponentName(generateOpponentName());
@@ -71,9 +76,10 @@ export function StartScreen({ onStart }: StartScreenProps) {
 
         {/* Start Button */}
         <Button
-          onClick={onStart}
+          onClick={() => onStart(opponentName)}
           size="lg"
           className="w-full font-mono text-sm tracking-wider"
+          disabled={!opponentName}
         >
           NEW GAME
         </Button>
