@@ -27,6 +27,7 @@ export interface GameState {
   humanPlayedCard: Card | null;
   cpuPlayedCard: Card | null;
   winner: "human" | "cpu" | null;
+  roundWinner: "human" | "cpu" | null;
   opponentName: string;
   log: string[];
   validationErrors: ValidationError[];
@@ -120,6 +121,7 @@ export function initGame(opponentName?: string): GameState {
       humanPlayedCard: null,
       cpuPlayedCard: null,
       winner: null,
+      roundWinner: null,
       opponentName: opponentName ?? generateOpponentName(),
       log: ["DECK VALIDATION FAILED. Cannot start match."],
       validationErrors: errors,
@@ -143,6 +145,7 @@ export function initGame(opponentName?: string): GameState {
     humanPlayedCard: null,
     cpuPlayedCard: null,
     winner: null,
+    roundWinner: null,
     opponentName: name,
     log: ["Match started. You pick the attribute first. Let's see who dumps faster."],
     validationErrors: [],
