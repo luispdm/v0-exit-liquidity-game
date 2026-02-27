@@ -15,26 +15,6 @@ import {
 import { GameCard } from "@/components/game-card";
 import { useGame } from "@/hooks/use-game";
 import type { Attribute } from "@/lib/cards";
-import { cn } from "@/lib/utils";
-
-const PHASE_LABELS: Record<string, string> = {
-  PICK_ATTRIBUTE: "Pick Attribute",
-  HUMAN_SELECT: "Select Your Card",
-  CPU_SELECT: "Opponent Selecting...",
-  REVEAL: "Reveal",
-  RESOLVE: "Resolve",
-  NEXT_ROUND: "Next Round",
-  GAME_OVER: "Game Over",
-};
-
-const PHASE_ORDER = [
-  "PICK_ATTRIBUTE",
-  "HUMAN_SELECT",
-  "CPU_SELECT",
-  "REVEAL",
-  "RESOLVE",
-  "NEXT_ROUND",
-];
 
 const ATTRIBUTE_LABELS: Record<Attribute, string> = {
   price: "Price",
@@ -150,32 +130,13 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
         <div className="flex items-center gap-3 text-xs font-mono text-muted-foreground">
           <span>R{state.round}</span>
           <span className="text-foreground/50">|</span>
-          <span>Picker: <span className="text-primary">{state.picker === "human" ? "YOU" : "CPU"}</span></span>
+          <span>Picker: <span className="text-primary">{state.picker === "human" ? "YOU" : state.opponentName}</span></span>
           <span className="text-foreground/50">|</span>
-          <span className="text-primary">Dumped: {state.humanDumped.length}</span>
+          <span className="text-primary">You dumped: {state.humanDumped.length}</span>
           <span className="text-foreground/50">/</span>
-          <span className="text-accent">CPU: {state.cpuDumped.length}</span>
+          <span className="text-accent">They dumped: {state.cpuDumped.length}</span>
         </div>
       </header>
-
-      {/* Phase Step Indicator */}
-      <div className="flex items-center justify-center gap-1 px-4 py-2 border-b border-border bg-secondary/30 overflow-x-auto">
-        {PHASE_ORDER.map((p) => (
-          <span
-            key={p}
-            className={cn(
-              "text-[10px] font-mono px-2 py-0.5 rounded whitespace-nowrap",
-              state.phase === p
-                ? "bg-primary text-primary-foreground font-bold"
-                : PHASE_ORDER.indexOf(p) < PHASE_ORDER.indexOf(state.phase)
-                  ? "bg-primary/20 text-primary/60"
-                  : "bg-secondary text-muted-foreground",
-            )}
-          >
-            {PHASE_LABELS[p]}
-          </span>
-        ))}
-      </div>
 
       {/* Main Game Area */}
       <main className="flex-1 flex flex-col lg:flex-row">
@@ -261,7 +222,7 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
                     <span className="text-lg font-bold text-muted-foreground font-mono">VS</span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
-                    <span className="text-[10px] font-mono text-accent font-bold uppercase">CPU</span>
+                    <span className="text-[10px] font-mono text-accent font-bold uppercase truncate max-w-[120px]">{state.opponentName}</span>
                     <GameCard
                       card={state.cpuPlayedCard}
                       highlighted={state.selectedAttribute}
@@ -373,7 +334,7 @@ export function GameBoard({ onQuit }: { onQuit: () => void }) {
           </DialogHeader>
           <div className="flex flex-col items-center gap-2 py-4 font-mono text-xs text-muted-foreground">
             <p>Rounds played: {state.round}</p>
-            <p>Your dumped: {state.humanDumped.length} | CPU dumped: {state.cpuDumped.length}</p>
+            <p>You dumped: {state.humanDumped.length} | They dumped: {state.cpuDumped.length}</p>
           </div>
           <DialogFooter className="sm:justify-center">
             <Button onClick={onQuit} className="font-mono">

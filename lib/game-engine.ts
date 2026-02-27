@@ -127,9 +127,8 @@ export function initGame(): GameState {
   }
 
   const deck = shuffle(CARDS);
-  const half = Math.floor(deck.length / 2);
-  const humanHand = deck.slice(0, half);
-  const cpuHand = deck.slice(half);
+  const humanHand = deck.slice(0, 5);
+  const cpuHand = deck.slice(5, 10);
 
   return {
     phase: "PICK_ATTRIBUTE",

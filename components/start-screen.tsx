@@ -42,15 +42,15 @@ export function StartScreen({ onStart }: StartScreenProps) {
             </li>
             <li className="flex gap-2">
               <span className="text-primary shrink-0">03</span>
-              <span>The LOWER value wins and DUMPS their card (goodbye, bags).</span>
+              <span>The LOWER value wins and DUMPS their card onto the loser.</span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary shrink-0">04</span>
-              <span>The loser takes their card back (still bagholding).</span>
+              <span>The loser takes their own card back AND the winner's dumped card.</span>
             </li>
             <li className="flex gap-2">
               <span className="text-primary shrink-0">05</span>
-              <span>First to dump all cards exits liquidity and wins.</span>
+              <span>First to empty their hand exits liquidity and wins.</span>
             </li>
           </ul>
         </div>
